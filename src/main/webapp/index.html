@@ -1,0 +1,450 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniNest - Student Housing Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+</head>
+<body class="landing-body">
+<nav class="navbar landing-nav">
+  <a href="${pageContext.request.contextPath}/index.jsp" class="navbar-brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px;">
+      <path d="M12 2L2 9L4 11L12 5.5L20 11L22 9L12 2Z" fill="#4f46e5"/>
+      <path d="M6 10.5V20H18V10.5L12 6.5L6 10.5Z" fill="#4f46e5"/>
+    </svg>
+    Uni<span>Nest</span>
+  </a>
+  <div class="navbar-nav landing-nav-topics">
+    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-link active">Home</a>
+    <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="nav-link">Browse Properties</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#how-it-works" class="nav-link">How It Works</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </div>
+  <div class="landing-nav-actions">
+    <c:choose>
+      <c:when test="${not empty sessionScope.loggedUser}">
+        <a href="${pageContext.request.contextPath}/jsp/home.jsp" class="btn btn-primary btn-sm" style="background: #315e8b; border: none;">Dashboard</a>
+      </c:when>
+      <c:otherwise>
+        <a href="${pageContext.request.contextPath}/LoginServlet" class="btn btn-outline btn-sm" style="border-color: #5b3abf; color: #5b3abf;">Login</a>
+        <a href="${pageContext.request.contextPath}/RegisterServlet" class="btn btn-primary btn-sm" style="background: #2b5c8f; border: none;">Register</a>
+      </c:otherwise>
+    </c:choose>
+  </div>
+</nav>
+
+<main>
+  <!-- Hero Section -->
+  <section class="landing-hero-new">
+    <div class="hero-content">
+      <div class="hero-badge">500+ VERIFIED PROPERTIES</div>
+      <h1>Find Your Perfect Student Home Near University</h1>
+      <p class="hero-sub">Reliable, safe, and community-focused housing solutions designed specifically for the modern student journey.</p>
+      
+      <form method="get" action="${pageContext.request.contextPath}/PropertyServlet" class="hero-search-bar">
+        <input type="hidden" name="action" value="list">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" name="location" placeholder="Search by city, university or area...">
+        <button type="submit" class="btn btn-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          Search
+        </button>
+      </form>
+      
+      <div class="hero-tags">
+        <span>Budget Friendly</span>
+        <span>Near Campus</span>
+        <span>Shared Flats</span>
+      </div>
+      
+      <div class="hero-assurances">
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f7c948" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg> Identity Verified</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f7c948" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Secure Payments</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f7c948" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg> 24/7 Support</span>
+      </div>
+    </div>
+    <div class="home-picture-strip">
+      <img src="images/ref-property-1.png" alt="Student room">
+      <img src="images/ref-property-2.png" alt="Student living room">
+      <img src="images/ref-property-3.png" alt="Student bedroom">
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="landing-stats-new">
+    <div><strong>500+</strong><span>Properties</span></div>
+    <div><strong>1200+</strong><span>Students Housed</span></div>
+    <div><strong>98%</strong><span>Verified Listings</span></div>
+    <div><strong>4.8/5</strong><span>User Rating</span></div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="landing-section bg-light-pink">
+    <div class="section-header-center">
+      <span class="kicker-text">HOW IT WORKS</span>
+      <h2>Get Housed in 3 Simple Steps</h2>
+    </div>
+    
+    <div class="landing-step-grid new-step-grid">
+      <article class="landing-card new-step-card">
+        <div class="step-icon step-icon-purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <h3>Search</h3>
+        <p>Browse through thousands of verified student rooms, studios, and shared apartments near your campus.</p>
+      </article>
+      <article class="landing-card new-step-card">
+        <div class="step-icon step-icon-pink">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </div>
+        <h3>Book</h3>
+        <p>Schedule viewings or book instantly with our secure payment system. No hidden paperwork stress.</p>
+      </article>
+      <article class="landing-card new-step-card">
+        <div class="step-icon step-icon-orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <h3>Connect</h3>
+        <p>Move in with confidence and connect with your new roommates through our matching platform.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Featured Properties -->
+  <section class="landing-section bg-light-pink pt-0">
+    <div class="landing-section-head">
+      <div>
+        <h2>Featured Properties</h2>
+        <p>Top-rated student housing available right now</p>
+      </div>
+      <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="landing-text-link">View All Properties &rarr;</a>
+    </div>
+    
+    <div class="landing-property-grid">
+      <article class="landing-property-card new-prop-card">
+        <div class="landing-property-photo property-one">
+          <span class="badge-approved"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="20 6 9 17 4 12"></polyline></svg> APPROVED</span>
+          <button class="btn-heart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        </div>
+        <div class="landing-property-body">
+          <h3>Canal Point Residence</h3>
+          <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Edinburgh, Scotland</p>
+          <div class="prop-footer">
+            <div class="price"><strong>Rs. 18,500</strong><span>/month</span></div>
+            <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-primary btn-sm btn-dark-blue">Book Now</a>
+          </div>
+        </div>
+      </article>
+      <article class="landing-property-card new-prop-card">
+        <div class="landing-property-photo property-two">
+          <span class="badge-approved"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="20 6 9 17 4 12"></polyline></svg> APPROVED</span>
+          <button class="btn-heart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        </div>
+        <div class="landing-property-body">
+          <h3>St. Pancras Way</h3>
+          <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> London, UK</p>
+          <div class="prop-footer">
+            <div class="price"><strong>Rs. 24,000</strong><span>/month</span></div>
+            <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-primary btn-sm btn-dark-blue">Book Now</a>
+          </div>
+        </div>
+      </article>
+      <article class="landing-property-card new-prop-card">
+        <div class="landing-property-photo property-three">
+          <span class="badge-approved"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="20 6 9 17 4 12"></polyline></svg> APPROVED</span>
+          <button class="btn-heart"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        </div>
+        <div class="landing-property-body">
+          <h3>The Campus Loft</h3>
+          <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Manchester, UK</p>
+          <div class="prop-footer">
+            <div class="price"><strong>Rs. 16,000</strong><span>/month</span></div>
+            <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-primary btn-sm btn-dark-blue">Book Now</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Why Students Trust UniNest -->
+  <section class="landing-section bg-light-pink pt-0 trust-section">
+    <div class="section-header-center">
+      <h2>Why Students Trust UniNest</h2>
+    </div>
+    <div class="trust-grid-new">
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+        <div class="trust-content">
+          <strong>Verified Landlords</strong>
+          <p>Every property owner undergoes a strict 5-step background check.</p>
+        </div>
+      </article>
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>
+        <div class="trust-content">
+          <strong>Price Match Guarantee</strong>
+          <p>Find it cheaper elsewhere and we'll refund the difference.</p>
+        </div>
+      </article>
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <div class="trust-content">
+          <strong>Roommate Matching</strong>
+          <p>Our AI connects you with peers based on study habits and interests.</p>
+        </div>
+      </article>
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+        <div class="trust-content">
+          <strong>Included Utilities</strong>
+          <p>No hidden costs. Rent includes high-speed WiFi, water, and heating.</p>
+        </div>
+      </article>
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <div class="trust-content">
+          <strong>Prime Locations</strong>
+          <p>All housing is within a 15-minute walk of major university campuses.</p>
+        </div>
+      </article>
+      <article>
+        <svg class="trust-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <div class="trust-content">
+          <strong>24/7 Security</strong>
+          <p>CCTV monitoring and secure keycard access for your peace of mind.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Solutions for Everyone -->
+  <section class="landing-section bg-light-blue solutions-new">
+    <div class="section-header-center">
+      <h2>Solutions for Everyone</h2>
+      <p class="solutions-sub">Whether you are looking for a place to stay or managing a property portfolio,<br>UniNest has the tools you need.</p>
+    </div>
+    
+    <div class="landing-audience-grid new-audience-grid">
+      <article class="landing-card audience-purple">
+        <svg class="audience-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5b3abf" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+        <h3>I'm a Student</h3>
+        <ul>
+          <li>Browse verified listings</li>
+          <li>Direct booking platform</li>
+          <li>Roommate preferences survey</li>
+        </ul>
+        <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-primary btn-block btn-purple">Find Housing</a>
+      </article>
+      <article class="landing-card audience-gold">
+        <svg class="audience-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8a6900" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><path d="M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>
+        <h3>I'm a Landlord</h3>
+        <ul>
+          <li>Free property listing</li>
+          <li>Student verification checks</li>
+          <li>Automated rent collection</li>
+        </ul>
+        <a href="${pageContext.request.contextPath}/RegisterServlet" class="btn btn-primary btn-block btn-gold">List Property</a>
+      </article>
+      <article class="landing-card audience-slate">
+        <svg class="audience-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#665b86" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <h3>For Universities</h3>
+        <ul>
+          <li>Dashboard for student housing</li>
+          <li>Analytics and occupancy rates</li>
+          <li>Partnership opportunities</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary btn-block btn-slate">Partner with Us</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- What Students Say -->
+  <section class="landing-section bg-light-pink testimonials-new">
+    <div class="section-header-center">
+      <h2>What Students Say</h2>
+    </div>
+    <div class="landing-testimonial-grid new-testimonial-grid">
+      <article class="landing-card">
+        <div class="stars">★★★★★</div>
+        <p>"UniNest made finding a room so easy. I was stressed moving to a new city, but the verification gave me such peace of mind."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar bg-purple-light">SC</div>
+          <div class="author-info">
+            <strong>Sarah Chen</strong>
+            <small>University of Manchester</small>
+          </div>
+        </div>
+      </article>
+      <article class="landing-card">
+        <div class="stars">★★★★★</div>
+        <p>"The roommate matching service is actually incredible. I ended up living with three other biology students who are now my best friends!"</p>
+        <div class="testimonial-author">
+          <div class="author-avatar bg-purple-lighter">JM</div>
+          <div class="author-info">
+            <strong>James Miller</strong>
+            <small>UCL, London</small>
+          </div>
+        </div>
+      </article>
+      <article class="landing-card">
+        <div class="stars">★★★★★</div>
+        <p>"As an international student, the transparent pricing and online booking system saved me from a lot of potential scams."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar bg-gold-light">AM</div>
+          <div class="author-info">
+            <strong>Anita Malik</strong>
+            <small>University of Edinburgh</small>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Popular Cities -->
+  <section class="landing-section bg-dark-blue cities-section">
+    <div class="section-header-center">
+      <h2 style="color: #fff; margin-bottom: 2rem;">Popular Cities</h2>
+    </div>
+    <div class="cities-grid">
+      <div class="city-card">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+        <h3>London</h3>
+        <span>120+ Properties</span>
+      </div>
+      <div class="city-card">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+        <h3>Manchester</h3>
+        <span>85+ Properties</span>
+      </div>
+      <div class="city-card">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><path d="M9 7h.01"></path><path d="M15 7h.01"></path><path d="M9 11h.01"></path><path d="M15 11h.01"></path></svg>
+        <h3>Edinburgh</h3>
+        <span>54+ Properties</span>
+      </div>
+      <div class="city-card">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 22h20M12 2v16M4 22V10l8-8 8 8v12"></path></svg>
+        <h3>Oxford</h3>
+        <span>42+ Properties</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Are you a Landlord? -->
+  <section class="split-section">
+    <div class="split-left">
+      <h2>Are you a<br>Landlord?</h2>
+      <p>Reach thousands of verified students every month. Our platform handles the booking, verification, and payments so you can focus on managing your property.</p>
+      <ul>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> 100% Free to List</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Direct Messaging with Tenants</li>
+        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> Secure Automated Payments</li>
+      </ul>
+      <a href="${pageContext.request.contextPath}/RegisterServlet" class="btn btn-primary btn-dark-blue">Register as Landlord</a>
+    </div>
+    <div class="split-right">
+      <div class="laptop-mockup">
+        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80" alt="Dashboard on Laptop">
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQs -->
+  <section class="landing-section bg-light-pink faq-section">
+    <div class="section-header-center">
+      <h2>Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question">How does the verification process work? <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I book a viewing before paying? <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">What utilities are included in the rent? <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is my deposit safe with UniNest? <span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="newsletter-content">
+      <h2>Stay Ahead of the Curve</h2>
+      <p>Get notified as soon as new properties near your university are listed. Don't miss out on your perfect home.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit" class="btn btn-primary btn-purple">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px;">
+          <path d="M12 2L2 9L4 11L12 5.5L20 11L22 9L12 2Z" fill="#3b82f6"/>
+          <path d="M6 10.5V20H18V10.5L12 6.5L6 10.5Z" fill="#3b82f6"/>
+        </svg>
+        UniNest
+      </a>
+      <p>The UK's most trusted student housing platform, dedicated to safety, community, and clarity.</p>
+      <div class="social-icons">
+        <a href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></a>
+        <a href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path></svg></a>
+        <a href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Students</h4>
+        <ul>
+          <li><a href="#">Search Housing</a></li>
+          <li><a href="#">Roommate Finder</a></li>
+          <li><a href="#">Student Resources</a></li>
+          <li><a href="#">Safety Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Landlords</h4>
+        <ul>
+          <li><a href="#">List a Property</a></li>
+          <li><a href="#">Landlord Portal</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Success Stories</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 UniNest Student Housing Platform. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
