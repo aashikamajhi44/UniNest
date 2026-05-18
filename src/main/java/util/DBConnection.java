@@ -3,16 +3,20 @@ package util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class DBConnection {
 
-    private static final String DB_NAME = setting("UNINEST_DB_NAME", "uninest_db");
+    private static final Properties FILE_SETTINGS = loadSettings();
+    private static final Pattern SAFE_IDENTIFIER = Pattern.compile("[A-Za-z0-9_]+");
+    private static final String DB_NAME = databaseName(setting("UNINEST_DB_NAME", "uninest_db"));
     private static final String DEFAULT_ADMIN_EMAIL = "admin@uninest.com";
     private static final String DEFAULT_ADMIN_PASSWORD = "admin123";
     private static final String HOST = setting("UNINEST_DB_HOST", "localhost");
     private static final String PORT = setting("UNINEST_DB_PORT", "3306");
-    private static final String BASE_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String BASE_URL = jdbcUrl(null);
+    private static final String URL = jdbcUrl(DB_NAME);
     private static final String USER = setting("UNINEST_DB_USER", "root");
     private static final String PASSWORD = setting("UNINEST_DB_PASSWORD", "");
     private static boolean initialized = false;
@@ -35,12 +39,34 @@ public class DBConnection {
             return;
         }
 
-        try (Connection con = DriverManager.getConnection(BASE_URL, USER, PASSWORD);
-             java.sql.Statement st = con.createStatement()) {
-            st.executeUpdate("CREATE DATABASE IF NOT EXISTS " + DB_NAME
-                    + " CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-            st.executeUpdate("USE " + DB_NAME);
+        SQLException initFailure = null;
+        try (Connection baseCon = DriverManager.getConnection(BASE_URL, USER, PASSWORD);
+             java.sql.Statement st = baseCon.createStatement()) {
+            st.executeUpdate("CREATE DATABASE IF NOT EXISTS `" + DB_NAME + "` "
+                    + "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        } catch (SQLException e) {
+            initFailure = e;
+        }
 
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            createTables(con);
+            ensureDefaultAdmin(con);
+            initialized = true;
+            return;
+        } catch (SQLException directConnectFailure) {
+            if (initFailure != null) {
+                directConnectFailure.addSuppressed(initFailure);
+            }
+            throw new SQLException(
+                    "Unable to initialize the UniNest database. Configure UNINEST_DB_HOST, "
+                            + "UNINEST_DB_PORT, UNINEST_DB_NAME, UNINEST_DB_USER, and "
+                            + "UNINEST_DB_PASSWORD so every device points to the same MySQL server.",
+                    directConnectFailure);
+        }
+    }
+
+    private static void createTables(Connection con) throws SQLException {
+        try (java.sql.Statement st = con.createStatement()) {
             st.executeUpdate("CREATE TABLE IF NOT EXISTS users ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY,"
                     + "name VARCHAR(100) NOT NULL,"
@@ -113,11 +139,7 @@ public class DBConnection {
                     + "FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,"
                     + "FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE"
                     + ")");
-
-            ensureDefaultAdmin(con);
         }
-
-        initialized = true;
     }
 
     private static void ensureDefaultAdmin(Connection con) throws SQLException {
@@ -162,6 +184,42 @@ public class DBConnection {
             return value.trim();
         }
 
+        value = FILE_SETTINGS.getProperty(key);
+        if (value != null && !value.trim().isEmpty()) {
+            return value.trim();
+        }
+
+        value = FILE_SETTINGS.getProperty(dottedKey);
+        if (value != null && !value.trim().isEmpty()) {
+            return value.trim();
+        }
+
         return defaultValue;
+    }
+
+    private static String jdbcUrl(String databaseName) {
+        String databaseSegment = (databaseName == null || databaseName.trim().isEmpty()) ? "" : databaseName.trim();
+        return "jdbc:mysql://" + HOST + ":" + PORT + "/" + databaseSegment
+                + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    }
+
+    private static String databaseName(String configuredName) {
+        String name = configuredName == null ? "" : configuredName.trim();
+        if (!SAFE_IDENTIFIER.matcher(name).matches()) {
+            throw new IllegalArgumentException("Invalid database name: " + configuredName);
+        }
+        return name;
+    }
+
+    private static Properties loadSettings() {
+        Properties properties = new Properties();
+        try (java.io.InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("uninest.properties")) {
+            if (input != null) {
+                properties.load(input);
+            }
+        } catch (java.io.IOException ignored) {
+            // Optional config file.
+        }
+        return properties;
     }
 }
