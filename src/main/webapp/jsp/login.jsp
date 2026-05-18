@@ -1,15 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — UniNest</title>
+<title>Login - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <div class="auth-wrap">
+  <div class="auth-panel">
+  <div class="auth-visual">
+    <img src="${pageContext.request.contextPath}/images/Daily Mindset Boost.jpeg" alt="Student studying at a desk">
+  </div>
   <div class="auth-card">
 
     <div class="auth-logo">
@@ -18,22 +22,40 @@
     </div>
 
     <%-- Flash messages from session --%>
-    <c:if test="${not empty sessionScope.flashError}">
-      <div class="alert alert-danger">${sessionScope.flashError}</div>
-      <% session.removeAttribute("flashError"); %>
-    </c:if>
-    <c:if test="${not empty sessionScope.flashSuccess}">
-      <div class="alert alert-success">${sessionScope.flashSuccess}</div>
-      <% session.removeAttribute("flashSuccess"); %>
-    </c:if>
+    <%
+      Object flashError = session.getAttribute("flashError");
+      if (flashError != null && !flashError.toString().isBlank()) {
+    %>
+      <div class="alert alert-danger"><%= flashError %></div>
+    <%
+        session.removeAttribute("flashError");
+      }
+
+      Object flashSuccess = session.getAttribute("flashSuccess");
+      if (flashSuccess != null && !flashSuccess.toString().isBlank()) {
+    %>
+      <div class="alert alert-success"><%= flashSuccess %></div>
+    <%
+        session.removeAttribute("flashSuccess");
+      }
+    %>
 
     <%-- Request-scoped messages --%>
-    <c:if test="${not empty error}">
-      <div class="alert alert-danger">${error}</div>
-    </c:if>
-    <c:if test="${not empty success}">
-      <div class="alert alert-success">${success}</div>
-    </c:if>
+    <%
+      Object error = request.getAttribute("error");
+      if (error != null && !error.toString().isBlank()) {
+    %>
+      <div class="alert alert-danger"><%= error %></div>
+    <%
+      }
+
+      Object success = request.getAttribute("success");
+      if (success != null && !success.toString().isBlank()) {
+    %>
+      <div class="alert alert-success"><%= success %></div>
+    <%
+      }
+    %>
 
     <form method="post" action="${pageContext.request.contextPath}/LoginServlet" novalidate>
       <div class="form-group">
@@ -44,7 +66,7 @@
       <div class="form-group">
         <label class="form-label" for="password">Password</label>
         <input id="password" type="password" name="password" class="form-control"
-               placeholder="••••••••" required>
+               placeholder="" required>
       </div>
       <button type="submit" class="btn btn-primary btn-block btn-lg mt-2">Sign In</button>
     </form>
@@ -56,14 +78,15 @@
       <a href="${pageContext.request.contextPath}/RegisterServlet" class="btn btn-outline btn-sm" style="margin-left:.5rem">Register</a>
     </div>
 
-    <div class="demo-box">
-      <strong>Demo accounts:</strong><br>
-      Admin &nbsp;&nbsp;&nbsp;: admin@uninest.com &nbsp;/ admin123<br>
-      Landlord : john@landlord.com &nbsp;/ pass123<br>
-      Student &nbsp;: alice@student.com / pass123
+    <div class="text-center mt-3">
+      <a href="${pageContext.request.contextPath}/index.jsp" style="font-size:.85rem;color:var(--gray-500)">Back to home</a>
     </div>
 
+  </div>
   </div>
 </div>
 </body>
 </html>
+
+
+
