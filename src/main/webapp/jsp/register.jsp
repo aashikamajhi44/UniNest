@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +11,6 @@
 </head>
 <body>
 <div class="auth-wrap">
-  <div class="auth-panel auth-panel-register">
-  <div class="auth-visual">
-    <img src="${pageContext.request.contextPath}/images/Daily Mindset Boost.jpeg" alt="Student studying at a desk">
-  </div>
   <div class="auth-card">
 
     <div class="auth-logo">
@@ -21,14 +18,9 @@
       <p>Create your account</p>
     </div>
 
-    <%
-      Object error = request.getAttribute("error");
-      if (error != null && !error.toString().isBlank()) {
-    %>
-      <div class="alert alert-danger"><%= error %></div>
-    <%
-      }
-    %>
+    <c:if test="${not empty error}">
+      <div class="alert alert-danger">${error}</div>
+    </c:if>
 
     <form method="post" action="${pageContext.request.contextPath}/RegisterServlet" novalidate>
 
@@ -66,9 +58,9 @@
       <div class="form-group">
         <label class="form-label" for="role">Register As *</label>
         <select id="role" name="role" class="form-control form-select" required>
-          <option value="">- Select role -</option>
-          <option value="student">Student</option>
-          <option value="landlord">Landlord</option>
+          <option value="">— Select role —</option>
+          <option value="student"  ${param.role == 'student'  ? 'selected' : ''}>Student</option>
+          <option value="landlord" ${param.role == 'landlord' ? 'selected' : ''}>Landlord</option>
         </select>
         <p class="form-hint">Landlord accounts require admin verification before login.</p>
       </div>
@@ -84,10 +76,6 @@
     </div>
 
   </div>
-  </div>
 </div>
 </body>
 </html>
-
-
-
