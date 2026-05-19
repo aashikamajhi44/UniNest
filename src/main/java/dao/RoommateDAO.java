@@ -20,37 +20,55 @@ public class RoommateDAO {
 
     /** Send a roommate connection request. Returns generated ID. */
     public int sendRequest(int senderId, int receiverId, int propertyId) throws SQLException {
-        String sql = "INSERT INTO roommate_requests (sender_id, receiver_id, property_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO roommate_requests (sender_id, receiver_id, property_id) "
+                + "SELECT ?, ?, ? "
+                + "WHERE ? <> ? "
+                + "AND EXISTS (SELECT 1 FROM bookings WHERE student_id = ? AND property_id = ? AND status = 'accepted') "
+                + "AND EXISTS (SELECT 1 FROM bookings WHERE student_id = ? AND property_id = ? AND status = 'accepted')";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, senderId);
             ps.setInt(2, receiverId);
             ps.setInt(3, propertyId);
-            ps.executeUpdate();
+            ps.setInt(4, senderId);
+            ps.setInt(5, receiverId);
+            ps.setInt(6, senderId);
+            ps.setInt(7, propertyId);
+            ps.setInt(8, receiverId);
+            ps.setInt(9, propertyId);
+            int affected = ps.executeUpdate();
+            if (affected == 0) {
+                return -1;
+            }
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getInt(1) : -1;
         }
     }
 
     /** Update request status (accepted | rejected). */
-    public boolean updateStatus(int requestId, String status) throws SQLException {
-        String sql = "UPDATE roommate_requests SET status = ? WHERE id = ?";
+    public boolean updateStatus(int requestId, int receiverId, String status) throws SQLException {
+        String sql = "UPDATE roommate_requests SET status = ? WHERE id = ? AND receiver_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, requestId);
+            ps.setInt(3, receiverId);
             return ps.executeUpdate() > 0;
         }
     }
 
     /** Check if a request already exists between two students for a property. */
     public boolean requestExists(int senderId, int receiverId, int propertyId) throws SQLException {
-        String sql = "SELECT id FROM roommate_requests WHERE sender_id = ? AND receiver_id = ? AND property_id = ?";
+        String sql = "SELECT id FROM roommate_requests "
+                + "WHERE ((sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)) "
+                + "AND property_id = ? AND status != 'rejected'";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, senderId);
             ps.setInt(2, receiverId);
-            ps.setInt(3, propertyId);
+            ps.setInt(3, receiverId);
+            ps.setInt(4, senderId);
+            ps.setInt(5, propertyId);
             return ps.executeQuery().next();
         }
     }

@@ -111,6 +111,7 @@ public class PropertyServlet extends HttpServlet {
                         session.invalidate();
                     }
                     res.sendRedirect(req.getContextPath() + "/index.jsp");
+                    res.sendRedirect(req.getContextPath() + "/jsp/login.jsp");
                     break;
 
                 default:
@@ -203,6 +204,7 @@ public class PropertyServlet extends HttpServlet {
         p.setAmenities(req.getParameter("amenities"));
         String uploadedImage = saveUploadedImage(req);
         String existingImage = req.getParameter("existingImageUrl");
+        String existingImage = firstNonBlank(req.getParameter("existingImageUrl"), req.getParameter("imageUrl"));
         p.setImageUrl(uploadedImage != null ? uploadedImage : existingImage);
         return p;
     }

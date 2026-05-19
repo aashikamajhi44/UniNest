@@ -2,8 +2,8 @@
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
-         https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
-         version="6.1">
+         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
 
     <display-name>UniNest</display-name>
 
@@ -49,6 +49,22 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>/RoommateServlet</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/ProfileServlet</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/ReviewServlet</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/WishlistServlet</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/jsp/wishlist.jsp</url-pattern>
+    </filter-mapping>
 
     <!-- ============ Servlets ============ -->
 
@@ -76,10 +92,25 @@
     <servlet>
         <servlet-name>PropertyServlet</servlet-name>
         <servlet-class>controller.PropertyServlet</servlet-class>
+        <multipart-config>
+            <max-file-size>5242880</max-file-size>
+            <max-request-size>8388608</max-request-size>
+            <file-size-threshold>0</file-size-threshold>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>PropertyServlet</servlet-name>
         <url-pattern>/PropertyServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Uploaded property images -->
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>controller.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/uploads/*</url-pattern>
     </servlet-mapping>
 
     <!-- Booking -->
@@ -100,6 +131,26 @@
     <servlet-mapping>
         <servlet-name>RoommateServlet</servlet-name>
         <url-pattern>/RoommateServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Profile -->
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>controller.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/ProfileServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Review -->
+    <servlet>
+        <servlet-name>ReviewServlet</servlet-name>
+        <servlet-class>controller.ReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReviewServlet</servlet-name>
+        <url-pattern>/ReviewServlet</url-pattern>
     </servlet-mapping>
 
     <!-- ============ Session Config ============ -->
@@ -133,6 +184,16 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/AdminServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Wishlist -->
+    <servlet>
+        <servlet-name>WishlistServlet</servlet-name>
+        <servlet-class>controller.WishlistServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WishlistServlet</servlet-name>
+        <url-pattern>/WishlistServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

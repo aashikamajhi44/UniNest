@@ -1,20 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" isErrorPage="true" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" isErrorPage="true" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Error — UniNest</title>
+<title>Error - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <div class="auth-wrap">
   <div class="auth-card text-center">
-    <div style="font-size:4rem;margin-bottom:1rem">⚠️</div>
+    <div style="font-size:4rem;margin-bottom:1rem"></div>
     <h2 style="color:var(--danger);margin-bottom:.5rem">
       <c:choose>
-        <c:when test="${param.code == '403'}">403 — Access Denied</c:when>
-        <c:when test="${param.code == '404'}">404 — Page Not Found</c:when>
+        <c:when test="${param.code == '403'}">403 - Access Denied</c:when>
+        <c:when test="${param.code == '404'}">404 - Page Not Found</c:when>
         <c:otherwise>Something Went Wrong</c:otherwise>
       </c:choose>
     </h2>
@@ -29,9 +30,13 @@
     </p>
     <div class="flex gap-2" style="justify-content:center">
       <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary">Go Home</a>
-      <a href="javascript:history.back()" class="btn btn-gray">← Go Back</a>
+      <a href="javascript:history.back()" class="btn btn-gray">Go Back</a>
     </div>
   </div>
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
+
+
+
