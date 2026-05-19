@@ -235,13 +235,6 @@ public class PropertyServlet extends HttpServlet {
         return req.getContextPath() + "/uploads/" + fileName;
     }
 
-    private String firstNonBlank(String first, String second) {
-        if (first != null && !first.isBlank()) {
-            return first;
-        }
-        return second;
-    }
-
     private User getUser(HttpServletRequest req) {
         HttpSession s = req.getSession(false);
         return (s != null) ? (User) s.getAttribute("loggedUser") : null;
