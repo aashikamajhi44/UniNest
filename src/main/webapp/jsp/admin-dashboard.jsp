@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="dao.UserDAO, dao.PropertyDAO, dao.BookingDAO, java.util.List, model.User, model.Property" %>
 <%
@@ -28,7 +28,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard — UniNest</title>
+<title>Admin Dashboard - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -40,7 +41,7 @@
     <a href="?tab=landlords" class="nav-link ${tab=='landlords'?'active':''}">Landlords</a>
     <a href="?tab=listings"  class="nav-link ${tab=='listings' ?'active':''}">Listings</a>
     <a href="?tab=students"  class="nav-link ${tab=='students' ?'active':''}">Students</a>
-    <span style="font-size:.85rem;color:var(--gray-500);margin:0 .5rem">Admin</span>
+    <a href="${pageContext.request.contextPath}/ProfileServlet" class="nav-user">Hi, Super Admin</a>
     <a href="${pageContext.request.contextPath}/PropertyServlet?action=logout" class="btn btn-gray btn-sm">Logout</a>
   </div>
 </nav>
@@ -58,6 +59,11 @@
       <h1 class="page-title">Admin Dashboard</h1>
       <p class="page-sub">System overview and management controls</p>
     </div>
+    <div class="admin-visual-strip" aria-label="Platform activity">
+      <img src="${pageContext.request.contextPath}/images/prop1.png" alt="Verified student room">
+      <img src="${pageContext.request.contextPath}/images/prop2.png" alt="Student apartment">
+      <img src="${pageContext.request.contextPath}/images/prop3.png" alt="Campus housing">
+    </div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-val">${totalUsers}</div><div class="stat-label">Total Users</div></div>
       <div class="stat-card"><div class="stat-val">${totalProps}</div><div class="stat-label">Total Properties</div></div>
@@ -71,9 +77,9 @@
       <div class="card">
         <div class="card-header">Quick Actions</div>
         <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem">
-          <a href="?tab=landlords" class="btn btn-outline">👤 Verify Landlords</a>
-          <a href="?tab=listings"  class="btn btn-outline">🏠 Approve Listings</a>
-          <a href="?tab=students"  class="btn btn-outline">🎓 Manage Students</a>
+          <a href="?tab=landlords" class="btn btn-outline">Verify Landlords</a>
+          <a href="?tab=listings"  class="btn btn-outline">Approve Listings</a>
+          <a href="?tab=students"  class="btn btn-outline">Manage Students</a>
         </div>
       </div>
       <div class="card">
@@ -81,10 +87,10 @@
         <div class="card-body">
           <p style="font-size:.9rem;color:var(--gray-600)">UniNest is running normally.</p>
           <p style="font-size:.82rem;color:var(--gray-400);margin-top:.75rem">
-            Stack: Java JSP/Servlets · Maven · MySQL · MVC
+            Stack: Java JSP/Servlets - Maven - MySQL - MVC
           </p>
           <p style="font-size:.82rem;color:var(--gray-400);margin-top:.35rem">
-            Security: BCrypt hashing · AuthFilter · Session-based auth
+            Security: BCrypt hashing - AuthFilter - Session-based auth
           </p>
         </div>
       </div>
@@ -135,6 +141,7 @@
                         onsubmit="return confirm('Delete this user?')">
                     <input type="hidden" name="action" value="deleteUser">
                     <input type="hidden" name="userId" value="${u.id}">
+                    <input type="hidden" name="from" value="landlord">
                     <button class="btn btn-gray btn-sm">Delete</button>
                   </form>
                 </td>
@@ -165,7 +172,7 @@
                 <td><strong>${p.title}</strong></td>
                 <td>${p.landlordName}</td>
                 <td>${p.location}</td>
-                <td>₹${p.price}</td>
+                <td>Rs. ${p.price}</td>
                 <td><span class="badge badge-info">${p.roomType}</span></td>
                 <td>
                   <c:choose>
@@ -226,6 +233,7 @@
                         onsubmit="return confirm('Delete this student?')">
                     <input type="hidden" name="action" value="deleteUser">
                     <input type="hidden" name="userId" value="${u.id}">
+                    <input type="hidden" name="from" value="student">
                     <button class="btn btn-danger btn-sm">Delete</button>
                   </form>
                 </td>
@@ -241,5 +249,9 @@
   </c:if>
 
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
+
+
+

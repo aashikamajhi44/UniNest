@@ -10,30 +10,43 @@ import java.util.List;
 public class BookingDAO {
 
     private static final String JOIN =
-        "SELECT b.*, u.name AS student_name, p.title AS property_title, p.location AS property_location " +
-        "FROM bookings b JOIN users u ON b.student_id = u.id JOIN properties p ON b.property_id = p.id ";
+        "SELECT b.*, u.name AS student_name, p.title AS property_title, p.location AS property_location, "
+        + "r.rating AS review_rating, r.comment AS review_comment "
+        + "FROM bookings b JOIN users u ON b.student_id = u.id JOIN properties p ON b.property_id = p.id "
+        + "LEFT JOIN reviews r ON r.booking_id = b.id ";
 
     /** Insert a new booking request. Returns generated ID. */
     public int insert(Booking b) throws SQLException {
-        String sql = "INSERT INTO bookings (student_id, property_id, message) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO bookings (student_id, property_id, message) "
+                + "SELECT ?, p.id, ? "
+                + "FROM properties p "
+                + "JOIN users u ON u.id = p.landlord_id "
+                + "WHERE p.id = ? AND p.status = 'approved' AND u.is_verified = 1";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, b.getStudentId());
-            ps.setInt(2, b.getPropertyId());
-            ps.setString(3, b.getMessage());
-            ps.executeUpdate();
+            ps.setString(2, b.getMessage());
+            ps.setInt(3, b.getPropertyId());
+            int affected = ps.executeUpdate();
+            if (affected == 0) {
+                return -1;
+            }
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getInt(1) : -1;
         }
     }
 
     /** Update booking status (accepted | rejected). */
-    public boolean updateStatus(int bookingId, String status) throws SQLException {
-        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+    public boolean updateStatus(int bookingId, String status, int landlordId) throws SQLException {
+        String sql = "UPDATE bookings b "
+                + "JOIN properties p ON p.id = b.property_id "
+                + "SET b.status = ? "
+                + "WHERE b.id = ? AND p.landlord_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, bookingId);
+            ps.setInt(3, landlordId);
             return ps.executeUpdate() > 0;
         }
     }
@@ -97,6 +110,10 @@ public class BookingDAO {
         b.setStudentName(rs.getString("student_name"));
         b.setPropertyTitle(rs.getString("property_title"));
         b.setPropertyLocation(rs.getString("property_location"));
+        int rating = rs.getInt("review_rating");
+        b.setReviewed(!rs.wasNull());
+        b.setReviewRating(rating);
+        b.setReviewComment(rs.getString("review_comment"));
         return b;
     }
 }

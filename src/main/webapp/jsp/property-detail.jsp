@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${property.title} — UniNest</title>
+<title>${property.title} - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -17,7 +18,7 @@
     <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="nav-link active">Search</a>
     <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="nav-link">My Bookings</a>
     <a href="${pageContext.request.contextPath}/RoommateServlet?action=myConnections" class="nav-link">Roommates</a>
-    <span style="font-size:.85rem;color:var(--gray-500);margin:0 .5rem">Hi, ${sessionScope.userName}</span>
+    <a href="${pageContext.request.contextPath}/ProfileServlet" class="nav-user">Hi, ${sessionScope.userName}</a>
     <a href="${pageContext.request.contextPath}/PropertyServlet?action=logout" class="btn btn-gray btn-sm">Logout</a>
   </div>
 </nav>
@@ -29,12 +30,16 @@
       <h1 class="page-title">${property.title}</h1>
       <p class="page-sub">Listed by ${property.landlordName}</p>
     </div>
-    <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-gray">← Back to Search</a>
+    <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="btn btn-gray">Back to Search</a>
   </div>
 
   <c:if test="${not empty sessionScope.flashSuccess}">
     <div class="alert alert-success">${sessionScope.flashSuccess}</div>
     <% session.removeAttribute("flashSuccess"); %>
+  </c:if>
+  <c:if test="${not empty sessionScope.flashError}">
+    <div class="alert alert-danger">${sessionScope.flashError}</div>
+    <% session.removeAttribute("flashError"); %>
   </c:if>
 
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;align-items:start">
@@ -42,9 +47,10 @@
     <!-- Left: Property Info -->
     <div>
       <div class="card mb-3">
-        <div style="background:linear-gradient(135deg,var(--primary-light),#c7d2fe);height:230px;
-                    display:flex;align-items:center;justify-content:center;font-size:5rem;
-                    border-radius:var(--radius) var(--radius) 0 0">🏠</div>
+        <div class="property-detail-photo">
+          <c:if test="${not empty property.imageUrl}"><img src="${property.imageUrl}" alt="${property.title}"></c:if>
+          <c:if test="${empty property.imageUrl}">Home</c:if>
+        </div>
         <div class="card-body">
           <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
             <span class="badge badge-info">${property.roomType}</span>
@@ -57,11 +63,11 @@
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.25rem">
             <div style="background:var(--gray-50);border-radius:8px;padding:.85rem">
               <div style="font-size:.72rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em">Location</div>
-              <div style="font-weight:500;color:var(--gray-700);margin-top:.3rem">📍 ${property.location}</div>
+              <div style="font-weight:500;color:var(--gray-700);margin-top:.3rem">${property.location}</div>
             </div>
             <div style="background:var(--gray-50);border-radius:8px;padding:.85rem">
               <div style="font-size:.72rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em">Monthly Rent</div>
-              <div style="font-weight:700;color:var(--primary);font-size:1.15rem;margin-top:.3rem">₹${property.price}</div>
+              <div style="font-weight:700;color:var(--primary);font-size:1.15rem;margin-top:.3rem">Rs. ${property.price}</div>
             </div>
             <div style="background:var(--gray-50);border-radius:8px;padding:.85rem;grid-column:1/-1">
               <div style="font-size:.72rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em">Amenities</div>
@@ -81,10 +87,20 @@
       <div class="card">
         <div class="card-header">Request to Book</div>
         <div class="card-body">
+          <c:if test="${sessionScope.userRole == 'student'}">
+            <form method="post" action="${pageContext.request.contextPath}/WishlistServlet" style="margin-bottom:1rem">
+              <input type="hidden" name="action" value="toggle">
+              <input type="hidden" name="propertyId" value="${property.id}">
+              <input type="hidden" name="back" value="${pageContext.request.contextPath}/PropertyServlet?action=detail&id=${property.id}">
+              <button type="submit" class="btn ${wishlisted ? 'btn-danger' : 'btn-outline'} btn-block">
+                ${wishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+              </button>
+            </form>
+          </c:if>
           <c:choose>
             <c:when test="${alreadyBooked}">
               <div class="alert alert-info" style="margin-bottom:0">
-                ✓ You already have a booking request for this property.
+                 You already have a booking request for this property.
               </div>
             </c:when>
             <c:when test="${sessionScope.userRole == 'student'}">
@@ -111,7 +127,7 @@
         <div class="card">
           <div class="card-body text-center">
             <a href="${pageContext.request.contextPath}/RoommateServlet?action=browse&propertyId=${property.id}"
-               class="btn btn-outline btn-block">🤝 View Tenants / Roommates</a>
+               class="btn btn-outline btn-block">View Tenants / Roommates</a>
           </div>
         </div>
       </c:if>
@@ -119,5 +135,10 @@
     </div>
   </div>
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
+
+
+
+

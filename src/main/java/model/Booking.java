@@ -15,6 +15,9 @@ public class Booking {
     private String    studentName;
     private String    propertyTitle;
     private String    propertyLocation;
+    private boolean   reviewed;
+    private int       reviewRating;
+    private String    reviewComment;
 
     public Booking() {}
 
@@ -46,4 +49,13 @@ public class Booking {
 
     public String    getPropertyLocation()            { return propertyLocation; }
     public void      setPropertyLocation(String l)    { this.propertyLocation = l; }
+
+    public boolean   isReviewed()                     { return reviewed; }
+    public void      setReviewed(boolean reviewed)    { this.reviewed = reviewed; }
+
+    public int       getReviewRating()                { return reviewRating; }
+    public void      setReviewRating(int rating)      { this.reviewRating = rating; }
+
+    public String    getReviewComment()               { return reviewComment; }
+    public void      setReviewComment(String comment) { this.reviewComment = comment; }
 }

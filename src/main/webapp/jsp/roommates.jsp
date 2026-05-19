@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roommates — UniNest</title>
+<title>Roommates - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -17,7 +18,7 @@
     <a href="${pageContext.request.contextPath}/PropertyServlet?action=list" class="nav-link">Search</a>
     <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="nav-link">My Bookings</a>
     <a href="${pageContext.request.contextPath}/RoommateServlet?action=myConnections" class="nav-link active">Roommates</a>
-    <span style="font-size:.85rem;color:var(--gray-500);margin:0 .5rem">Hi, ${sessionScope.userName}</span>
+    <a href="${pageContext.request.contextPath}/ProfileServlet" class="nav-user">Hi, ${sessionScope.userName}</a>
     <a href="${pageContext.request.contextPath}/PropertyServlet?action=logout" class="btn btn-gray btn-sm">Logout</a>
   </div>
 </nav>
@@ -38,13 +39,13 @@
     <div class="page-header flex-between">
       <div>
         <h1 class="page-title">Property Tenants</h1>
-        <p class="page-sub">Students living at this property — send a connection request</p>
+        <p class="page-sub">Students living at this property - send a connection request</p>
       </div>
-      <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="btn btn-gray">← Back to Bookings</a>
+      <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="btn btn-gray">Back to Bookings</a>
     </div>
     <c:choose>
       <c:when test="${empty tenants}">
-        <div class="empty-state"><div class="icon">🤝</div><p>No other tenants at this property yet.</p></div>
+        <div class="empty-state"><p>No other tenants at this property yet.</p></div>
       </c:when>
       <c:otherwise>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem">
@@ -53,7 +54,7 @@
               <div class="card-body text-center">
                 <div style="width:64px;height:64px;background:var(--primary-light);border-radius:50%;
                             display:flex;align-items:center;justify-content:center;
-                            font-size:1.75rem;margin:0 auto .75rem">👤</div>
+                            font-size:1.75rem;margin:0 auto .75rem"></div>
                 <div style="font-weight:600;font-size:1rem;color:var(--gray-900)">${t.name}</div>
                 <div style="font-size:.82rem;color:var(--gray-400);margin:.2rem 0 1rem">${t.email}</div>
                 <form method="post" action="${pageContext.request.contextPath}/RoommateServlet">
@@ -74,9 +75,9 @@
   <c:if test="${empty tenants && not empty propertyId && viewMode == null}">
     <div class="page-header flex-between">
       <h1 class="page-title">Property Tenants</h1>
-      <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="btn btn-gray">← Back</a>
+      <a href="${pageContext.request.contextPath}/BookingServlet?action=myBookings" class="btn btn-gray">Back</a>
     </div>
-    <div class="empty-state"><div class="icon">🤝</div><p>No other tenants at this property yet.</p></div>
+    <div class="empty-state"><p>No other tenants at this property yet.</p></div>
   </c:if>
 
   <!-- CONNECTIONS MODE -->
@@ -156,7 +157,7 @@
               <div class="card-body text-center">
                 <div style="width:56px;height:56px;background:var(--success-bg);border-radius:50%;
                             display:flex;align-items:center;justify-content:center;
-                            font-size:1.5rem;margin:0 auto .75rem">🤝</div>
+                            font-size:1.5rem;margin:0 auto .75rem"></div>
                 <c:choose>
                   <c:when test="${r.senderId == sessionScope.userId}">
                     <div style="font-weight:600">${r.receiverName}</div>
@@ -178,5 +179,9 @@
   </c:if>
 
 </div>
+<%@ include file="footer.jsp" %>
 </body>
 </html>
+
+
+
