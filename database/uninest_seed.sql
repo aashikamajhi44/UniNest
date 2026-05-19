@@ -1,51 +1,133 @@
-
 USE uninest_db;
 
--- ---- Admin ----
--- The application creates/repairs the default admin at startup:
--- admin@uninest.com / admin123
+-- UniNest seed reference
+-- The app bootstrap creates admin@uninest.com / admin123 automatically.
+-- For the sample rows below, first register one landlord and one student in the app,
+-- then change the demo emails here if your local accounts use different addresses.
 
--- ---- Landlords ----
-INSERT INTO users (name, email, password, phone, role, is_verified) VALUES
-('John Owner', 'john@landlord.com',
- '$2a$12$LmN3oP4qR5sT6uV7wX8yZ9aB0cD1eF2gH3iJ4kL5mN6oP7qR8sT9u',
- '9876543210', 'landlord', 1),
-('Mary Property', 'mary@landlord.com',
- '$2a$12$LmN3oP4qR5sT6uV7wX8yZ9aB0cD1eF2gH3iJ4kL5mN6oP7qR8sT9u',
- '9876543211', 'landlord', 0);
+SET @landlord_email = 'landlord.demo@uninest.com';
+SET @student_email  = 'student.demo@uninest.com';
 
--- ---- Students ----
-INSERT INTO users (name, email, password, phone, role, is_verified) VALUES
-('Alice Student', 'alice@student.com',
- '$2a$12$LmN3oP4qR5sT6uV7wX8yZ9aB0cD1eF2gH3iJ4kL5mN6oP7qR8sT9u',
- '9123456789', 'student', 1),
-('Bob Student', 'bob@student.com',
- '$2a$12$LmN3oP4qR5sT6uV7wX8yZ9aB0cD1eF2gH3iJ4kL5mN6oP7qR8sT9u',
- '9123456780', 'student', 1);
+-- Optional: verify the landlord account so booking requests can be created.
+UPDATE users
+SET is_verified = 1
+WHERE email = @landlord_email AND role = 'landlord';
 
--- ---- Properties ----
-INSERT INTO properties (landlord_id, title, description, location, price, room_type, amenities, status)
-SELECT id, 'Cozy Studio Near Campus',
-       'Well-furnished studio with high-speed WiFi and 24/7 security. Walking distance to university.',
-       'Downtown, City', 8000.00, 'studio', 'WiFi, AC, Laundry, Kitchen, Security', 'approved'
-FROM users WHERE email='john@landlord.com';
+-- Sample approved property
+INSERT INTO properties (
+    landlord_id, title, description, location, price, room_type, amenities, image_url, status
+)
+SELECT
+    u.id,
+    'Sunlit Study Room Near Campus',
+    'Quiet room with a dedicated desk, warm lighting, and easy access to classes.',
+    'Baneshwor, Kathmandu',
+    14500.00,
+    'single',
+    'WiFi, Study Desk, Laundry, Balcony',
+    '/UniNest/images/dashboard-study-corner.png',
+    'approved'
+FROM users u
+WHERE u.email = @landlord_email
+  AND u.role = 'landlord'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM properties p
+      WHERE p.landlord_id = u.id
+        AND p.title = 'Sunlit Study Room Near Campus'
+  );
 
-INSERT INTO properties (landlord_id, title, description, location, price, room_type, amenities, status)
-SELECT id, 'Affordable Shared Room',
-       'Clean shared accommodation in a friendly environment. All utilities included.',
-       'University Area', 4500.00, 'shared', 'WiFi, Fan, Common Kitchen, Water', 'approved'
-FROM users WHERE email='john@landlord.com';
+-- Second sample approved property
+INSERT INTO properties (
+    landlord_id, title, description, location, price, room_type, amenities, image_url, status
+)
+SELECT
+    u.id,
+    'Cozy Corner Room with Window View',
+    'Bright room with storage, plants, and a calm setup suited for daily student living.',
+    'Maitidevi, Kathmandu',
+    16800.00,
+    'studio',
+    'WiFi, Attached Bath, Bookshelf, Printer Access',
+    '/UniNest/images/dashboard-cozy-room.png',
+    'approved'
+FROM users u
+WHERE u.email = @landlord_email
+  AND u.role = 'landlord'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM properties p
+      WHERE p.landlord_id = u.id
+        AND p.title = 'Cozy Corner Room with Window View'
+  );
 
-INSERT INTO properties (landlord_id, title, description, location, price, room_type, amenities, status)
-SELECT id, 'Modern 1BHK Apartment',
-       'Fully furnished modern apartment with premium amenities.',
-       'West District', 12000.00, 'apartment', 'WiFi, AC, Parking, Gym, Security', 'pending'
-FROM users WHERE email='mary@landlord.com';
-
--- ---- Sample Booking ----
+-- Sample booking against the first property
 INSERT INTO bookings (student_id, property_id, message, status)
-SELECT u.id, p.id,
-       'Hi, I am a second year student looking for accommodation near campus. I am responsible and tidy.',
-       'accepted'
-FROM users u, properties p
-WHERE u.email='alice@student.com' AND p.title='Cozy Studio Near Campus';
+SELECT
+    s.id,
+    p.id,
+    'I would like to visit this place this week and confirm availability.',
+    'accepted'
+FROM users s
+JOIN users l
+  ON l.email = @landlord_email
+ AND l.role = 'landlord'
+JOIN properties p
+  ON p.landlord_id = l.id
+ AND p.title = 'Sunlit Study Room Near Campus'
+WHERE s.email = @student_email
+  AND s.role = 'student'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM bookings b
+      WHERE b.student_id = s.id
+        AND b.property_id = p.id
+  );
+
+-- Sample wishlist item against the second property
+INSERT INTO wishlist (student_id, property_id)
+SELECT
+    s.id,
+    p.id
+FROM users s
+JOIN users l
+  ON l.email = @landlord_email
+ AND l.role = 'landlord'
+JOIN properties p
+  ON p.landlord_id = l.id
+ AND p.title = 'Cozy Corner Room with Window View'
+WHERE s.email = @student_email
+  AND s.role = 'student'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM wishlist w
+      WHERE w.student_id = s.id
+        AND w.property_id = p.id
+  );
+
+-- Sample review for the accepted booking
+INSERT INTO reviews (booking_id, student_id, property_id, rating, comment)
+SELECT
+    b.id,
+    s.id,
+    p.id,
+    5,
+    'Bright, clean, and genuinely good for studying.'
+FROM users s
+JOIN users l
+  ON l.email = @landlord_email
+ AND l.role = 'landlord'
+JOIN properties p
+  ON p.landlord_id = l.id
+ AND p.title = 'Sunlit Study Room Near Campus'
+JOIN bookings b
+  ON b.student_id = s.id
+ AND b.property_id = p.id
+WHERE s.email = @student_email
+  AND s.role = 'student'
+  AND b.status = 'accepted'
+  AND NOT EXISTS (
+      SELECT 1
+      FROM reviews r
+      WHERE r.booking_id = b.id
+  );
