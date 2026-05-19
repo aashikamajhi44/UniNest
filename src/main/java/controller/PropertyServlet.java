@@ -6,9 +6,15 @@ import model.Property;
 import model.User;
 
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Locale;
 
 /**
  * PropertyServlet handles:
@@ -24,6 +30,7 @@ import java.math.BigDecimal;
  *  POST ?action=approve     → admin approves/rejects property
  *  GET  ?action=logout      → destroy session
  */
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024, maxRequestSize = 8 * 1024 * 1024)
 public class PropertyServlet extends HttpServlet {
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
@@ -84,7 +91,10 @@ public class PropertyServlet extends HttpServlet {
                     break;
 
                 case "logout":
-                    req.getSession(false).invalidate();
+                    HttpSession session = req.getSession(false);
+                    if (session != null) {
+                        session.invalidate();
+                    }
                     res.sendRedirect(req.getContextPath() + "/jsp/login.jsp");
                     break;
 
@@ -156,7 +166,7 @@ public class PropertyServlet extends HttpServlet {
 
     // ---- Helpers ----
 
-    private Property buildFromRequest(HttpServletRequest req) {
+    private Property buildFromRequest(HttpServletRequest req) throws IOException, ServletException {
         Property p = new Property();
         p.setTitle(req.getParameter("title"));
         p.setDescription(req.getParameter("description"));
@@ -164,8 +174,43 @@ public class PropertyServlet extends HttpServlet {
         p.setPrice(new BigDecimal(req.getParameter("price")));
         p.setRoomType(req.getParameter("roomType"));
         p.setAmenities(req.getParameter("amenities"));
-        p.setImageUrl(req.getParameter("imageUrl"));
+        String uploadedImage = saveUploadedImage(req);
+        String existingImage = firstNonBlank(req.getParameter("existingImageUrl"), req.getParameter("imageUrl"));
+        p.setImageUrl(uploadedImage != null ? uploadedImage : existingImage);
         return p;
+    }
+
+    private String saveUploadedImage(HttpServletRequest req) throws IOException, ServletException {
+        Part part = req.getPart("imageFile");
+        if (part == null || part.getSize() == 0) {
+            return null;
+        }
+
+        String submittedName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+        String lowerName = submittedName.toLowerCase(Locale.ROOT);
+        if (!(lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg")
+                || lowerName.endsWith(".png") || lowerName.endsWith(".gif")
+                || lowerName.endsWith(".webp"))) {
+            throw new ServletException("Please upload a JPG, PNG, GIF, or WebP image.");
+        }
+
+        String extension = lowerName.substring(lowerName.lastIndexOf('.'));
+        String fileName = "property-" + System.currentTimeMillis() + extension;
+        Path uploadDir = UploadServlet.getUploadDirectory();
+        Files.createDirectories(uploadDir);
+        Path target = uploadDir.resolve(fileName);
+        try (java.io.InputStream input = part.getInputStream()) {
+            Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        return req.getContextPath() + "/uploads/" + fileName;
+    }
+
+    private String firstNonBlank(String first, String second) {
+        if (first != null && !first.isBlank()) {
+            return first;
+        }
+        return second;
     }
 
     private User getUser(HttpServletRequest req) {
