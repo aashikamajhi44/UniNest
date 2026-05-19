@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${property.title} - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -35,6 +36,10 @@
   <c:if test="${not empty sessionScope.flashSuccess}">
     <div class="alert alert-success">${sessionScope.flashSuccess}</div>
     <% session.removeAttribute("flashSuccess"); %>
+  </c:if>
+  <c:if test="${not empty sessionScope.flashError}">
+    <div class="alert alert-danger">${sessionScope.flashError}</div>
+    <% session.removeAttribute("flashError"); %>
   </c:if>
 
   <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;align-items:start">
@@ -82,6 +87,16 @@
       <div class="card">
         <div class="card-header">Request to Book</div>
         <div class="card-body">
+          <c:if test="${sessionScope.userRole == 'student'}">
+            <form method="post" action="${pageContext.request.contextPath}/WishlistServlet" style="margin-bottom:1rem">
+              <input type="hidden" name="action" value="toggle">
+              <input type="hidden" name="propertyId" value="${property.id}">
+              <input type="hidden" name="back" value="${pageContext.request.contextPath}/PropertyServlet?action=detail&id=${property.id}">
+              <button type="submit" class="btn ${wishlisted ? 'btn-danger' : 'btn-outline'} btn-block">
+                ${wishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+              </button>
+            </form>
+          </c:if>
           <c:choose>
             <c:when test="${alreadyBooked}">
               <div class="alert alert-info" style="margin-bottom:0">

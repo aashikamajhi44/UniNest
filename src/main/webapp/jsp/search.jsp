@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Search Properties - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -78,7 +79,9 @@
                   <input type="hidden" name="action" value="toggle">
                   <input type="hidden" name="propertyId" value="${p.id}">
                   <input type="hidden" name="back" value="${pageContext.request.contextPath}/PropertyServlet?action=list">
-                  <button type="submit" class="heart-btn" title="Save to wishlist">
+                  <button type="submit"
+                          class="heart-btn ${wishlistedPropertyIds != null && wishlistedPropertyIds.contains(p.id) ? 'active' : ''}"
+                          title="Save to wishlist">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                   </button>
                 </form>

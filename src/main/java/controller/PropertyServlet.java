@@ -2,6 +2,7 @@ package controller;
 
 import dao.BookingDAO;
 import dao.PropertyDAO;
+import dao.WishlistDAO;
 import model.Property;
 import model.User;
 
@@ -35,6 +36,7 @@ public class PropertyServlet extends HttpServlet {
 
     private final PropertyDAO propertyDAO = new PropertyDAO();
     private final BookingDAO  bookingDAO  = new BookingDAO();
+    private final WishlistDAO wishlistDAO = new WishlistDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -53,6 +55,9 @@ public class PropertyServlet extends HttpServlet {
                         req.getParameter("roomType"),
                         req.getParameter("maxPrice")
                     ));
+                    if (user != null && "student".equals(user.getRole())) {
+                        req.setAttribute("wishlistedPropertyIds", wishlistDAO.getPropertyIds(user.getId()));
+                    }
                     req.setAttribute("location", req.getParameter("location"));
                     req.setAttribute("roomType", req.getParameter("roomType"));
                     req.setAttribute("maxPrice", req.getParameter("maxPrice"));
@@ -61,8 +66,18 @@ public class PropertyServlet extends HttpServlet {
 
                 case "detail":
                     int id = Integer.parseInt(req.getParameter("id"));
-                    req.setAttribute("property", propertyDAO.findById(id));
-                    req.setAttribute("alreadyBooked", user != null && bookingDAO.alreadyBooked(user.getId(), id));
+                    Property property = propertyDAO.findById(id);
+                    if (property == null) {
+                        req.setAttribute("errorMessage", "Property not found.");
+                        req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
+                        return;
+                    }
+                    req.setAttribute("property", property);
+                    req.setAttribute("alreadyBooked",
+                            user != null && "student".equals(user.getRole()) && bookingDAO.alreadyBooked(user.getId(), id));
+                    if (user != null && "student".equals(user.getRole())) {
+                        req.setAttribute("wishlisted", wishlistDAO.isWishlisted(user.getId(), id));
+                    }
                     req.getRequestDispatcher("/jsp/property-detail.jsp").forward(req, res);
                     break;
 
@@ -105,6 +120,9 @@ public class PropertyServlet extends HttpServlet {
             req.setAttribute("errorMessage", "Invalid property ID.");
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
         } catch (Exception e) {
+            if (res.isCommitted()) {
+                return;
+            }
             req.setAttribute("errorMessage", e.getMessage());
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
         }
@@ -148,9 +166,15 @@ public class PropertyServlet extends HttpServlet {
 
                 case "approve":
                     requireRole(req, res, "admin");
+                    String propertyStatus = normalizedStatus(req.getParameter("status"), "approved", "rejected");
+                    if (propertyStatus == null) {
+                        req.getSession().setAttribute("flashError", "Invalid property status.");
+                        res.sendRedirect(req.getContextPath() + "/PropertyServlet?action=adminList");
+                        return;
+                    }
                     propertyDAO.updateStatus(
                         Integer.parseInt(req.getParameter("propertyId")),
-                        req.getParameter("status")
+                        propertyStatus
                     );
                     res.sendRedirect(req.getContextPath() + "/PropertyServlet?action=adminList");
                     break;
@@ -159,6 +183,9 @@ public class PropertyServlet extends HttpServlet {
                     res.sendRedirect(req.getContextPath() + "/jsp/home.jsp");
             }
         } catch (Exception e) {
+            if (res.isCommitted()) {
+                return;
+            }
             req.setAttribute("errorMessage", e.getMessage());
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
         }
@@ -219,5 +246,19 @@ public class PropertyServlet extends HttpServlet {
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
             throw new ServletException("Access denied for role: " + role);
         }
+    }
+
+    private String normalizedStatus(String rawStatus, String... allowedStatuses) {
+        if (rawStatus == null) {
+            return null;
+        }
+
+        String candidate = rawStatus.trim().toLowerCase(Locale.ROOT);
+        for (String allowedStatus : allowedStatuses) {
+            if (allowedStatus.equals(candidate)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 }

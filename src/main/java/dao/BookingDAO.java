@@ -17,25 +17,36 @@ public class BookingDAO {
 
     /** Insert a new booking request. Returns generated ID. */
     public int insert(Booking b) throws SQLException {
-        String sql = "INSERT INTO bookings (student_id, property_id, message) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO bookings (student_id, property_id, message) "
+                + "SELECT ?, p.id, ? "
+                + "FROM properties p "
+                + "JOIN users u ON u.id = p.landlord_id "
+                + "WHERE p.id = ? AND p.status = 'approved' AND u.is_verified = 1";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, b.getStudentId());
-            ps.setInt(2, b.getPropertyId());
-            ps.setString(3, b.getMessage());
-            ps.executeUpdate();
+            ps.setString(2, b.getMessage());
+            ps.setInt(3, b.getPropertyId());
+            int affected = ps.executeUpdate();
+            if (affected == 0) {
+                return -1;
+            }
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getInt(1) : -1;
         }
     }
 
     /** Update booking status (accepted | rejected). */
-    public boolean updateStatus(int bookingId, String status) throws SQLException {
-        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+    public boolean updateStatus(int bookingId, String status, int landlordId) throws SQLException {
+        String sql = "UPDATE bookings b "
+                + "JOIN properties p ON p.id = b.property_id "
+                + "SET b.status = ? "
+                + "WHERE b.id = ? AND p.landlord_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, bookingId);
+            ps.setInt(3, landlordId);
             return ps.executeUpdate() > 0;
         }
     }

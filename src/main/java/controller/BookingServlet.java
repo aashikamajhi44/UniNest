@@ -31,6 +31,7 @@ public class BookingServlet extends HttpServlet {
             switch (action) {
 
                 case "myBookings":
+                    requireRole(req, res, user, "student");
                     req.setAttribute("bookings", bookingDAO.getByStudent(user.getId()));
                     req.getRequestDispatcher("/jsp/booking.jsp").forward(req, res);
                     break;
@@ -45,6 +46,9 @@ public class BookingServlet extends HttpServlet {
                     res.sendRedirect(req.getContextPath() + "/jsp/booking.jsp");
             }
         } catch (Exception e) {
+            if (res.isCommitted()) {
+                return;
+            }
             req.setAttribute("errorMessage", e.getMessage());
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
         }
@@ -68,8 +72,13 @@ public class BookingServlet extends HttpServlet {
                         b.setStudentId(user.getId());
                         b.setPropertyId(propId);
                         b.setMessage(req.getParameter("message"));
-                        bookingDAO.insert(b);
-                        req.getSession().setAttribute("flashSuccess", "Booking request sent successfully!");
+                        int bookingId = bookingDAO.insert(b);
+                        if (bookingId > 0) {
+                            req.getSession().setAttribute("flashSuccess", "Booking request sent successfully!");
+                        } else {
+                            req.getSession().setAttribute("flashError",
+                                    "This property is not available for booking right now.");
+                        }
                     } else {
                         req.getSession().setAttribute("flashError", "You already have a booking request for this property.");
                     }
@@ -78,10 +87,19 @@ public class BookingServlet extends HttpServlet {
 
                 case "updateStatus":
                     requireRole(req, res, user, "landlord");
-                    bookingDAO.updateStatus(
+                    String bookingStatus = normalizedStatus(req.getParameter("status"), "accepted", "rejected");
+                    if (bookingStatus == null) {
+                        req.getSession().setAttribute("flashError", "Invalid booking status.");
+                        res.sendRedirect(req.getContextPath() + "/BookingServlet?action=landlordBookings");
+                        return;
+                    }
+                    boolean updated = bookingDAO.updateStatus(
                         Integer.parseInt(req.getParameter("bookingId")),
-                        req.getParameter("status")
+                        bookingStatus,
+                        user.getId()
                     );
+                    req.getSession().setAttribute(updated ? "flashSuccess" : "flashError",
+                            updated ? "Booking status updated." : "That booking does not belong to your property.");
                     res.sendRedirect(req.getContextPath() + "/BookingServlet?action=landlordBookings");
                     break;
 
@@ -89,6 +107,9 @@ public class BookingServlet extends HttpServlet {
                     res.sendRedirect(req.getContextPath() + "/jsp/booking.jsp");
             }
         } catch (Exception e) {
+            if (res.isCommitted()) {
+                return;
+            }
             req.setAttribute("errorMessage", e.getMessage());
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
         }
@@ -106,5 +127,19 @@ public class BookingServlet extends HttpServlet {
             req.getRequestDispatcher("/jsp/error.jsp").forward(req, res);
             throw new ServletException("Access denied.");
         }
+    }
+
+    private String normalizedStatus(String rawStatus, String... allowedStatuses) {
+        if (rawStatus == null) {
+            return null;
+        }
+
+        String candidate = rawStatus.trim().toLowerCase();
+        for (String allowedStatus : allowedStatuses) {
+            if (allowedStatus.equals(candidate)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 }

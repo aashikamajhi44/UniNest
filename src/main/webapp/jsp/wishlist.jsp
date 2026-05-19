@@ -11,6 +11,7 @@
 <meta charset="UTF-8">
 <title>My Wishlist - UniNest</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -59,7 +60,7 @@
               <div class="prop-card-price">Rs. ${w.propertyPrice}<span style="font-size:.8rem;color:var(--gray-500);font-weight:500">/mo</span></div>
             </div>
             <div class="prop-card-foot">
-              <a href="${pageContext.request.contextPath}/PropertyServlet?action=view&id=${w.propertyId}" class="btn btn-outline btn-sm">View</a>
+              <a href="${pageContext.request.contextPath}/PropertyServlet?action=detail&id=${w.propertyId}" class="btn btn-outline btn-sm">View</a>
               <form method="post" action="${pageContext.request.contextPath}/WishlistServlet" style="margin:0">
                 <input type="hidden" name="action" value="remove">
                 <input type="hidden" name="propertyId" value="${w.propertyId}">

@@ -29,6 +29,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -59,9 +60,9 @@
       <p class="page-sub">System overview and management controls</p>
     </div>
     <div class="admin-visual-strip" aria-label="Platform activity">
-      <img src="${pageContext.request.contextPath}/images/prop1.jpg" alt="Verified room">
-      <img src="${pageContext.request.contextPath}/images/prop2.jpg" alt="Student apartment">
-      <img src="${pageContext.request.contextPath}/images/prop3.jpg" alt="Campus housing">
+      <img src="${pageContext.request.contextPath}/images/prop1.png" alt="Verified student room">
+      <img src="${pageContext.request.contextPath}/images/prop2.png" alt="Student apartment">
+      <img src="${pageContext.request.contextPath}/images/prop3.png" alt="Campus housing">
     </div>
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-val">${totalUsers}</div><div class="stat-label">Total Users</div></div>

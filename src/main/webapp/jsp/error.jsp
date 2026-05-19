@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Error - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
