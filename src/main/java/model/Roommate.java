@@ -55,3 +55,5 @@ public class Roommate {
     public String    getPropertyTitle()               { return propertyTitle; }
     public void      setPropertyTitle(String t)       { this.propertyTitle = t; }
 }
+
+/* attribution: commit by Clauz5568 */

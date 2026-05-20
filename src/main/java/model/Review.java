@@ -33,3 +33,5 @@ public class Review {
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 }
+
+/* attribution: commit by Clauz5568 */
