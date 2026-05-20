@@ -24,6 +24,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard - UniNest</title>
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -75,7 +76,28 @@
       </div>
     </div>
     <div class="dashboard-hero-media" aria-label="Student housing photos">
-      <img class="dashboard-hero-single" src="${pageContext.request.contextPath}/images/prop1.jpg" alt="Student room">
+      <c:choose>
+        <c:when test="${sessionScope.userRole == 'landlord'}">
+          <img
+              class="dashboard-hero-photo dashboard-hero-photo-front dashboard-hero-photo-landlord-front"
+              src="${pageContext.request.contextPath}/images/dashboard-study-corner.png"
+              alt="Warm study corner with desk and lights">
+          <img
+              class="dashboard-hero-photo dashboard-hero-photo-back dashboard-hero-photo-landlord-back"
+              src="${pageContext.request.contextPath}/images/dashboard-cozy-room.png"
+              alt="Bright student room with bed and window">
+        </c:when>
+        <c:otherwise>
+          <img
+              class="dashboard-hero-photo dashboard-hero-photo-front dashboard-hero-photo-student-front"
+              src="${pageContext.request.contextPath}/images/dashboard-cozy-room.png"
+              alt="Bright student room with bed and window">
+          <img
+              class="dashboard-hero-photo dashboard-hero-photo-back dashboard-hero-photo-student-back"
+              src="${pageContext.request.contextPath}/images/dashboard-study-corner.png"
+              alt="Warm study corner with desk and lights">
+        </c:otherwise>
+      </c:choose>
     </div>
   </div>
 

@@ -18,6 +18,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UniNest - Find Your Perfect Nest Near Campus</title>
 <meta name="description" content="UniNest helps university students find safe, verified housing and connect with compatible roommates.">
+<link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
@@ -190,7 +191,7 @@
               </div>
               <div class="prop-card-foot">
                 <span class="badge badge-success">Verified</span>
-                <a href="${pageContext.request.contextPath}/PropertyServlet?action=view&id=${p.id}" class="btn-coral" style="padding:.4rem .9rem;font-size:.82rem">View</a>
+                <a href="${pageContext.request.contextPath}/PropertyServlet?action=detail&id=${p.id}" class="btn-coral" style="padding:.4rem .9rem;font-size:.82rem">View</a>
               </div>
             </div>
           </c:forEach>
