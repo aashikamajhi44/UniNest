@@ -44,10 +44,10 @@ public class WishlistServlet extends HttpServlet {
         try {
             if ("remove".equals(action)) {
                 dao.remove(u.getId(), propertyId);
-                session.setAttribute("flashSuccess", "Removed from your wishlist.");
+                setFlash(session, "Removed from your wishlist.");
             } else { // toggle (default) or add
                 boolean nowWishlisted = dao.toggle(u.getId(), propertyId);
-                session.setAttribute("flashSuccess",
+                setFlash(session,
                     nowWishlisted ? "Saved to your wishlist." : "Removed from your wishlist.");
             }
         } catch (SQLException e) {
@@ -68,5 +68,9 @@ public class WishlistServlet extends HttpServlet {
             return null;
         }
         return u;
+    }
+
+    private void setFlash(HttpSession session, String message) {
+        session.setAttribute("flashSuccess", message);
     }
 }
