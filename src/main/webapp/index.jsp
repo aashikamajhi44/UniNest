@@ -16,7 +16,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UniNest - Find Your Perfect Nest Near Campus</title>
+<title>UniNest - Find Your Perfect Nest Near Campus</title>`n<!-- aashika commit 1: landing page update -->
 <meta name="description" content="UniNest helps university students find safe, verified housing and connect with compatible roommates.">
 <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
@@ -249,4 +249,5 @@
 <%@ include file="jsp/footer.jsp" %>
 </body>
 </html>
+
 
