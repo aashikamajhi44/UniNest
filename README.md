@@ -1,176 +1,179 @@
-# UniNest — Student Housing Platform
 
-A full-stack MVC web application for university student housing management.
+# UniNest
 
----
+UniNest is a Java MVC web application for student housing management. It helps students find verified rental properties, send booking requests, manage roommate connections, save wishlisted rooms, and review completed stays. Landlords can manage listings and bookings, while admins oversee users and property approvals.
 
 ## Tech Stack
 
-| Layer      | Technology                        |
-|------------|-----------------------------------|
-| Backend    | Java 11, JSP, Servlets            |
-| Build      | Maven 3.x                         |
-| Server     | Apache Tomcat 11                   |
-| Database   | MySQL 8.x                         |
-| Security   | BCrypt password hashing, AuthFilter|
-| Frontend   | HTML5, CSS3 (custom), JSTL        |
-
----
+| Layer | Technology |
+| --- | --- |
+| Frontend | JSP, JSTL, HTML5, CSS3 |
+| Backend | Java 11, Jakarta Servlets |
+| Database | MySQL |
+| Build Tool | Maven |
+| Server | Apache Tomcat |
+| Auth & Security | Session-based auth, AuthFilter, BCrypt password hashing |
+| File Uploads | Jakarta Servlet multipart upload |
 
 ## Project Structure
 
-```
-UniNest/
-├── pom.xml
-├── database/
-│   ├── uninest_schema.sql
-│   └── uninest_seed.sql
-└── src/main/
-    ├── java/
-    │   ├── controller/
-    │   │   ├── LoginServlet.java
-    │   │   ├── RegisterServlet.java
-    │   │   ├── PropertyServlet.java
-    │   │   ├── BookingServlet.java
-    │   │   ├── RoommateServlet.java
-    │   │   └── AdminServlet.java
-    │   ├── model/
-    │   │   ├── User.java
-    │   │   ├── Property.java
-    │   │   ├── Booking.java
-    │   │   └── Roommate.java
-    │   ├── dao/
-    │   │   ├── UserDAO.java
-    │   │   ├── PropertyDAO.java
-    │   │   ├── BookingDAO.java
-    │   │   └── RoommateDAO.java
-    │   ├── util/
-    │   │   ├── DBConnection.java
-    │   │   └── PasswordUtil.java
-    │   └── filter/
-    │       └── AuthFilter.java
-    └── webapp/
-        ├── index.jsp
-        ├── css/style.css
-        ├── jsp/
-        │   ├── login.jsp
-        │   ├── register.jsp
-        │   ├── home.jsp
-        │   ├── search.jsp
-        │   ├── property-detail.jsp
-        │   ├── booking.jsp
-        │   ├── roommates.jsp
-        │   ├── admin-dashboard.jsp
-        │   └── error.jsp
-        └── WEB-INF/web.xml
+```text
+UNINEST/
+|-- database/
+|   |-- uninest_schema.sql
+|   |-- uninest_seed.sql
+|   `-- SHARED_SETUP.md
+|-- src/main/
+|   |-- java/
+|   |   |-- controller/       # Servlets for auth, profile, listings, bookings, reviews
+|   |   |-- dao/              # Database access classes
+|   |   |-- filter/           # Authentication filter
+|   |   |-- model/            # Java model classes
+|   |   `-- util/             # DB connection and password utilities
+|   |-- resources/
+|   |   `-- uninest.properties
+|   `-- webapp/
+|       |-- css/              # Application styling
+|       |-- images/           # UI and property images
+|       |-- jsp/              # JSP pages
+|       |-- WEB-INF/web.xml   # Servlet and filter mappings
+|       `-- index.jsp
+`-- pom.xml
 ```
 
----
+## Key Features
 
-## Setup Instructions
+- Student, landlord, and admin roles
+- Student and landlord registration/login
+- BCrypt password hashing
+- Protected pages using `AuthFilter`
+- Profile page for updating account details
+- Admin dashboard for user and property oversight
+- Property listing management for landlords
+- Property approval workflow
+- Property search and detail pages for students
+- Booking request management
+- Roommate request and connection features
+- Wishlist support for saved properties
+- Review and rating support for accepted bookings
+- Shared database configuration through `uninest.properties`
 
-### Step 1 — Database
+## Main Database Tables
+
+| Table | Description |
+| --- | --- |
+| `users` | Student, landlord, and admin accounts |
+| `properties` | Housing listings created by landlords |
+| `bookings` | Booking requests between students and listings |
+| `roommate_requests` | Roommate connection requests |
+| `wishlist` | Saved properties for students |
+| `reviews` | Ratings and comments for accepted bookings |
+
+## Important Routes
+
+| Route | Servlet | Description |
+| --- | --- | --- |
+| `/LoginServlet` | `LoginServlet` | Login and logout flow |
+| `/RegisterServlet` | `RegisterServlet` | User registration |
+| `/ProfileServlet` | `ProfileServlet` | Profile view and updates |
+| `/PropertyServlet` | `PropertyServlet` | Property listing, search, add, edit, delete |
+| `/BookingServlet` | `BookingServlet` | Booking requests and status updates |
+| `/RoommateServlet` | `RoommateServlet` | Roommate requests and connections |
+| `/WishlistServlet` | `WishlistServlet` | Wishlist actions |
+| `/ReviewServlet` | `ReviewServlet` | Review creation and update |
+| `/AdminServlet` | `AdminServlet` | Admin dashboard actions |
+| `/uploads/*` | `UploadServlet` | Uploaded property images |
+
+## Group Members Contribution
+
+| Member Name | Contribution |
+| --- | --- |
+| **Aashika Majhi** | - Developed the Authentication & User Management module.<br>- Implemented login, registration, session handling, and profile management functionalities. |
+| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, booking requests, and booking status management. |
+| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, approval workflows, and database connectivity. |
+| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management. |
+| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality. |
+
+## Getting Started
+
+### Prerequisites
+
+- Java 11+
+- Maven 3+
+- Apache Tomcat 10/11
+- MySQL or MariaDB
+- XAMPP can be used for local MySQL/MariaDB
+
+### 1. Clone the Repository
 
 ```bash
-mysql -u root -p
+git clone <repository-url>
+cd "UNINEST"
+
 ```
 
-```sql
-source /path/to/database/uninest_schema.sql
+### 2. Configure the Database
+
+The app reads database settings from `src/main/resources/uninest.properties`.
+
+```properties
+UNINEST_DB_HOST=localhost
+UNINEST_DB_PORT=3306
+UNINEST_DB_NAME=uninest_db
+UNINEST_DB_USER=root
+UNINEST_DB_PASSWORD=
 ```
 
-For seed data, first generate real BCrypt hashes (see note in seed file), then:
-```sql
-source /path/to/database/uninest_seed.sql
-```
+Update these values if your MySQL username, password, port, or database name is different.
 
-**Or** just register accounts through the UI — it's faster.
+### 3. Create or Seed the Database
 
----
+The application can create required tables during startup through `DBConnection`.
 
-### Step 2 — Configure DB Connection
-
-Edit `src/main/java/util/DBConnection.java`:
-
-```java
-private static final String URL      = "jdbc:mysql://localhost:3306/uninest_db?...";
-private static final String USER     = "root";
-private static final String PASSWORD = "your_mysql_password"; // ← change this
-```
-
----
-
-### Step 3 — Build & Run
+You can also run the SQL files manually:
 
 ```bash
-cd UniNest
+mysql -u root -p < database/uninest_schema.sql
+mysql -u root -p uninest_db < database/uninest_seed.sql
+```
+
+### 4. Build the Project
+
+```bash
 mvn clean package
 ```
 
-Deploy `target/UniNest.war` to Tomcat 11, then open browser:
-**http://localhost:8080/UniNest**
+This creates:
 
----
-
-### Step 4 — Deploy to Tomcat
-
-```bash
-mvn clean package
-cp target/UniNest.war /path/to/tomcat/webapps/
-# then start Tomcat
+```text
+target/UniNest.war
 ```
 
----
+### 5. Run on Tomcat
 
-## Demo Accounts
+Deploy `target/UniNest.war` to Tomcat, then open:
 
-| Role     | Email                 | Password  | Notes                        |
-|----------|-----------------------|-----------|------------------------------|
-| Admin    | admin@uninest.com     | admin123  | Full system control          |
-| Landlord | john@landlord.com     | pass123   | Verified, has 2 listings     |
-| Landlord | mary@landlord.com     | pass123   | Pending verification         |
-| Student  | alice@student.com     | pass123   | Has 1 accepted booking       |
-| Student  | bob@student.com       | pass123   | No bookings yet              |
+```text
+http://localhost:8080/UniNest
+```
 
-> **Note:** The app creates/repairs the admin account automatically. If using seed data
-> for demo landlord/student accounts, replace their hash placeholders with real BCrypt
-> hashes generated by `PasswordUtil.hash("pass123")`.
+## Default Admin
 
----
+The application ensures a default admin account exists:
 
-## Features
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@uninest.com` | `admin123` |
 
-### Admin
-- System stats dashboard
-- Verify / revoke landlord accounts
-- Approve / reject property listings
-- Delete users
+Change this password after first login for real use.
 
-### Landlord
-- Add, edit, delete property listings (submitted for admin approval)
-- View and manage booking requests (accept / reject)
-- Inline modals — no page reload needed
+## Environment Notes
 
-### Student
-- Search properties with filters (location, type, max price)
-- View property detail and send booking requests
-- Track booking request status
-- Browse tenants of same property
-- Send and respond to roommate connection requests
-- View accepted roommate connections
+- Do not commit machine-specific IDE files or generated build output.
+- Do not commit local database passwords.
+- If using XAMPP, make sure MySQL/MariaDB is running on the same port configured in `uninest.properties`.
+- If Tomcat already uses port `8080`, change the connector port in Tomcat's `conf/server.xml`.
 
----
+## License
 
-## Security
-
-- Passwords hashed with **BCrypt** (12 rounds) via `jbcrypt` library
-- **AuthFilter** protects all authenticated routes
-- Role-based access enforced in both filter and servlets
-- Session timeout: 30 minutes
-- Unverified landlords blocked from login
-
----
-
-## Run on Different Port
-
-Change the HTTP connector port in your Tomcat `conf/server.xml`, then restart Tomcat.
+Developed as a student academic project.
