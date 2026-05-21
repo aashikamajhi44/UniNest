@@ -87,11 +87,11 @@ UNINEST SAMS/
 
 | Member Name | Contribution |
 | --- | --- |
-| **Aashika Majhi** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for roommate and review features. |
-| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, property search/filtering, booking requests, and booking status management.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for property and booking features. |
-| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, user/property management, and approval workflows.<br>- Handled database connectivity, shared configuration setup, and frontend UI styling/design improvements. |
-| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for wishlist features. |
-| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Assisted in implementing roommate request features, review submission, and rating management.<br>- Contributed to backend logic, JSP integration, and database operations related to roommate and review functionality. |
+| **Aashika Majhi** | - Developed the Authentication & User Management module.<br>- Implemented login, registration, session handling, and profile management functionalities.<br>- Prepared Individual Class Diagrams, Method Explanation, and overall documentation support. |
+| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, booking requests, and booking status management.<br>- Prepared Test Cases and Testing documentation. |
+| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, approval workflows, and database connectivity.<br>- Prepared Overall Class Diagram and Database Development documentation. |
+| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management.<br>- Prepared ERD Design, Business Rules, and Normalization documentation. |
+| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality.<br>- Prepared Introduction, Feature List, Normalization, and Conclusion documentation. |
 
 ## Getting Started
 
