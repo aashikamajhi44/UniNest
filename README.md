@@ -87,11 +87,11 @@ UNINEST SAMS/
 
 | Member Name | Contribution |
 | --- | --- |
-| **Aashika Majhi** | - Developed the Authentication & User Management module.<br>- Implemented login, registration, session handling, and profile management functionalities.<br>- Prepared Individual Class Diagrams, Method Explanation, and overall documentation support. |
-| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, booking requests, and booking status management.<br>- Prepared Test Cases and Testing documentation. |
-| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, approval workflows, and database connectivity.<br>- Prepared Overall Class Diagram and Database Development documentation. |
-| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management.<br>- Prepared ERD Design, Business Rules, and Normalization documentation. |
-| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality.<br>- Prepared Introduction, Feature List, Normalization, and Conclusion documentation. |
+| **Aashika Majhi** | - Developed the Authentication & User Management module.<br>- Implemented login, registration, session handling, and profile management functionalities. |
+| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, booking requests, and booking status management. |
+| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, approval workflows, and database connectivity. |
+| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management. |
+| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality. |
 
 ## Getting Started
 
