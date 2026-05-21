@@ -1,3 +1,4 @@
+
 # UniNest
 
 UniNest is a Java MVC web application for student housing management. It helps students find verified rental properties, send booking requests, manage roommate connections, save wishlisted rooms, and review completed stays. Landlords can manage listings and bookings, while admins oversee users and property approvals.
@@ -17,7 +18,7 @@ UniNest is a Java MVC web application for student housing management. It helps s
 ## Project Structure
 
 ```text
-UNINEST SAMS/
+UNINEST/
 |-- database/
 |   |-- uninest_schema.sql
 |   |-- uninest_seed.sql
@@ -107,7 +108,8 @@ UNINEST SAMS/
 
 ```bash
 git clone <repository-url>
-cd "UNINEST Final"
+cd "UNINEST"
+
 ```
 
 ### 2. Configure the Database
