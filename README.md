@@ -107,7 +107,7 @@ UNINEST SAMS/
 
 ```bash
 git clone <repository-url>
-cd "UNINEST SAMS"
+cd "UNINEST Final"
 ```
 
 ### 2. Configure the Database
