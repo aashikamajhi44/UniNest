@@ -1,4 +1,4 @@
-`# UniNest
+# UniNest
 
 UniNest is a Java MVC web application for student housing management. It helps students find verified rental properties, send booking requests, manage roommate connections, save wishlisted rooms, and review completed stays. Landlords can manage listings and bookings, while admins oversee users and property approvals.
 
@@ -82,6 +82,16 @@ UNINEST SAMS/
 | `/ReviewServlet` | `ReviewServlet` | Review creation and update |
 | `/AdminServlet` | `AdminServlet` | Admin dashboard actions |
 | `/uploads/*` | `UploadServlet` | Uploaded property images |
+
+## Group Members Contribution
+
+| Member Name | Contribution |
+| --- | --- |
+| **Aashika Majhi** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for roommate and review features. |
+| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, property search/filtering, booking requests, and booking status management.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for property and booking features. |
+| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, user/property management, and approval workflows.<br>- Handled database connectivity, shared configuration setup, and frontend UI styling/design improvements. |
+| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management.<br>- Worked on related servlets, DAO classes, JSP pages, and database integration for wishlist features. |
+| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Assisted in implementing roommate request features, review submission, and rating management.<br>- Contributed to backend logic, JSP integration, and database operations related to roommate and review functionality. |
 
 ## Getting Started
 
