@@ -23,7 +23,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - UniNest</title>
+<title>Dashboard - UniNest</title>`n<!-- aashika commit 2: dashboard hero update -->
 <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
@@ -418,6 +418,7 @@ function openEditModal(id,title,desc,loc,price,type,amen,img){
 <%@ include file="footer.jsp" %>
 </body>
 </html>
+
 
 
 

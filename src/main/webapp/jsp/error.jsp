@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Error - UniNest</title>
+<title>Error - UniNest</title>`n<!-- aashika commit 1: error page icon update -->
 <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/favicon.svg">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
@@ -37,6 +37,7 @@
 <%@ include file="footer.jsp" %>
 </body>
 </html>
+
 
 
 
