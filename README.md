@@ -84,6 +84,16 @@ UNINEST/
 | `/AdminServlet` | `AdminServlet` | Admin dashboard actions |
 | `/uploads/*` | `UploadServlet` | Uploaded property images |
 
+## Group Members Contribution
+
+| Member Name | Contribution |
+| --- | --- |
+| **Aashika Majhi** | - Developed the Authentication & User Management module.<br>- Implemented login, registration, session handling, and profile management functionalities. |
+| **Aishwarya Chaudhary** | - Developed the Property & Booking Management module.<br>- Implemented property CRUD operations, booking requests, and booking status management. |
+| **Nischal Giri** | - Developed the Admin Panel, Database Integration, and Frontend Design.<br>- Implemented admin dashboard functionalities, approval workflows, and database connectivity. |
+| **Nischal Mishra** | - Developed the Wishlist module.<br>- Implemented wishlist add/remove functionality and saved property management. |
+| **Puskar Raj Kafle** | - Developed the Roommate & Review module.<br>- Implemented roommate request handling, roommate connection logic, and review/rating functionality. |
+
 ## Getting Started
 
 ### Prerequisites
@@ -99,6 +109,7 @@ UNINEST/
 ```bash
 git clone <repository-url>
 cd "UNINEST"
+
 ```
 
 ### 2. Configure the Database

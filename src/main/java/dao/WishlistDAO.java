@@ -97,6 +97,26 @@ public class WishlistDAO {
         return list;
     }
 
+    public Optional<Wishlist> findByStudentAndProperty(int studentId, int propertyId) throws SQLException {
+        String sql = "SELECT id, student_id, property_id, created_at FROM wishlist " +
+                     "WHERE student_id = ? AND property_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setInt(2, propertyId);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                return Optional.empty();
+            }
+            Wishlist w = new Wishlist();
+            w.setId(rs.getInt("id"));
+            w.setStudentId(rs.getInt("student_id"));
+            w.setPropertyId(rs.getInt("property_id"));
+            w.setCreatedAt(rs.getTimestamp("created_at"));
+            return Optional.of(w);
+        }
+    }
+
     public int countForStudent(int studentId) throws SQLException {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(

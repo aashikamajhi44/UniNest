@@ -56,6 +56,10 @@
             </div>
             <div class="prop-card-body">
               <div class="prop-card-title">${w.propertyTitle}</div>
+              <div class="prop-card-meta">
+                <span>Landlord: ${w.landlordName}</span>
+                <span class="prop-card-status">${w.propertyStatus}</span>
+              </div>
               <div class="prop-card-loc">${w.propertyLocation}</div>
               <div class="prop-card-price">Rs. ${w.propertyPrice}<span style="font-size:.8rem;color:var(--gray-500);font-weight:500">/mo</span></div>
             </div>

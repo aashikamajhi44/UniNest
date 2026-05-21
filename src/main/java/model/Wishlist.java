@@ -40,4 +40,22 @@ public class Wishlist {
     public void setPropertyStatus(String s) { this.propertyStatus = s; }
     public String getLandlordName() { return landlordName; }
     public void setLandlordName(String s) { this.landlordName = s; }
+
+    public boolean isAvailable() {
+        return propertyStatus != null && "approved".equalsIgnoreCase(propertyStatus);
+    }
+
+    public String getFormattedPrice() {
+        return propertyPrice == null ? "-" : propertyPrice.toPlainString();
+    }
+
+    @Override
+    public String toString() {
+        return "Wishlist{" +
+                "id=" + id +
+                ", studentId=" + studentId +
+                ", propertyId=" + propertyId +
+                ", propertyTitle='" + propertyTitle + '\'' +
+                '}';
+    }
 }

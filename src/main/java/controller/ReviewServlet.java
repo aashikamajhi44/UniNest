@@ -59,3 +59,5 @@ public class ReviewServlet extends HttpServlet {
         return (session != null) ? (User) session.getAttribute("loggedUser") : null;
     }
 }
+
+/* attribution: commit by Clauz5568 */
